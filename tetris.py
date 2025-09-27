@@ -104,7 +104,7 @@ class Tetris:
                 if (i*4 + j) in self.figure.image():
                     block_row = i + self.figure.y
                     block_col = j + self.figure.x
-                    if (block_row >= self.rows or block_col >= self.cols or block_row < 0 or self.grid[block_row][block_col] > 0):
+                    if (block_row >= self.rows or block_col >= self.cols or block_col <= 0 or self.grid[block_row][block_col] > 0):
                         return True
         return False
 
@@ -115,6 +115,18 @@ class Tetris:
         self.figure.y += 1
         if self.collision():
             self.figure.y -= 1
+
+    # Move left
+    def left(self):
+        self.figure.x -= 1
+        if self.collision():
+            self.figure.x +=  1
+
+    # Move right
+    def right(self):
+        self.figure.x += 1
+        if self.collision():
+            self.figure.x -=  1
 
 
 # Main game loop
@@ -130,6 +142,14 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
                 sys.exit()
+
+        keys = pygame.key.get_pressed()
+        if not tetris.end:
+            if keys[pygame.K_LEFT]:
+                tetris.left()
+            elif keys[pygame.K_RIGHT]:
+                tetris.right()
+
 
         # let block fall at constant rate
         counter += 1
