@@ -2,6 +2,7 @@
 import pygame
 import random
 import sys
+import time
 
 pygame.init()
 
@@ -108,13 +109,12 @@ class Tetris:
                         return True
         return False
 
-    # Remove row
-
     # Move down
     def move_down(self):
         self.figure.y += 1
         if self.collision():
             self.figure.y -= 1
+            self.freeze()
 
     # Move left
     def left(self):
@@ -141,6 +141,20 @@ class Tetris:
         if self.collision():
             self.figure.orientation = orientation
 
+    # Freeze
+    # Once shape has reached its ultimate position, save it to the grid
+    def freeze(self):
+        for i in range(4):
+            for j in range(4):
+                if (i*4 + j) in self.figure.image():
+                    self.grid[i + self.figure.y][j + self.figure.x] = self.figure.colour
+        
+        self.new_shape()
+        #if new shape collides immediately, shapes have reached the top of the screen -> game over
+        if self.collision():
+            self.end = True
+
+    # Remove row
 
 
 # Main game loop
@@ -183,6 +197,14 @@ def main():
                 
 
         tetris.make_grid()
+
+        for x in range(ROWS):
+            for y in range(COLS):
+                if tetris.grid[x][y] > 0:
+                    value = tetris.grid[x][y]
+                    image = ASSETS[value]
+                    SCREEN.blit(image, (y*CELL, x*CELL))
+                    pygame.draw.rect(SCREEN, WHITE, (y*CELL, x*CELL, CELL, CELL), 1)
 
         # show shape on game screen
         if tetris.figure:
