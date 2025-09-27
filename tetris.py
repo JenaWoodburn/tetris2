@@ -157,23 +157,23 @@ def main():
                 run = False
                 sys.exit()
 
-        keys = pygame.key.get_pressed()
-        if not tetris.end:
-            if keys[pygame.K_LEFT]:
-                tetris.left()
-            elif keys[pygame.K_RIGHT]:
-                tetris.right()
-            elif keys[pygame.K_DOWN]:
-                tetris.move_down()
-            elif keys[pygame.K_SPACE]:
-                tetris.freefall()
-            elif keys[pygame.K_UP]:
-                tetris.rotate()
+            keys = pygame.key.get_pressed()
+            if not tetris.end:
+                if keys[pygame.K_LEFT]:
+                    tetris.left()
+                elif keys[pygame.K_RIGHT]:
+                    tetris.right()
+                elif keys[pygame.K_DOWN]:
+                    tetris.move_down()
+                elif keys[pygame.K_SPACE]:
+                    tetris.freefall()
+                elif keys[pygame.K_UP]:
+                    tetris.rotate()
 
 
         # let block fall at constant rate
         counter += 1
-        if counter >= 10000:
+        if counter >= 15000:
             counter = 0
 
         if move:
