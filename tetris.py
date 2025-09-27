@@ -134,6 +134,13 @@ class Tetris:
             self.figure.y += 1
         self.figure.y -= 1
 
+    # Rotate
+    def rotate(self):
+        orientation = self.figure.orientation
+        self.figure.rotate()
+        if self.collision():
+            self.figure.orientation = orientation
+
 
 
 # Main game loop
@@ -156,8 +163,12 @@ def main():
                 tetris.left()
             elif keys[pygame.K_RIGHT]:
                 tetris.right()
+            elif keys[pygame.K_DOWN]:
+                tetris.move_down()
             elif keys[pygame.K_SPACE]:
                 tetris.freefall()
+            elif keys[pygame.K_UP]:
+                tetris.rotate()
 
 
         # let block fall at constant rate
