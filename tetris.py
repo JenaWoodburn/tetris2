@@ -57,7 +57,7 @@ class Shape:
         self.x = x
         self.y = y
         self.type = random.choice(self.SHAPES)
-        self.shape = self.VERSION(self.type)
+        self.shape = self.VERSION[self.type]
         self.colour = random.randint(1,4)
         self.orientation = 0
 
@@ -81,6 +81,7 @@ class Tetris:
         self.grid = [[0 for i in range(cols)] for j in range(rows)]
         self.next = None
         self.end = False
+        self.new_shape()
 
     # Make grid
     def make_grid(self):
@@ -90,6 +91,11 @@ class Tetris:
             pygame.draw.line(SCREEN, GRID, (CELL*j, 0), (CELL*j, HEIGHT-120))
 
     # Make new shape
+    def new_shape(self):
+        if not self.next:
+            self.next = Shape(5, 0)
+        self.figure = self.next
+        self.next = Shape(5, 0)
 
 
 # Main game loop
@@ -105,6 +111,16 @@ def main():
                 sys.exit()
 
         tetris.make_grid()
+
+        # show shape on game screen
+        for i in range(4):
+            for j in range(4):
+                if (i * 4 + j) in tetris.figure.image():
+                    shape = ASSETS[tetris.figure.colour]
+                    x = CELL * (tetris.figure.x + i)
+                    y = CELL * (tetris.figure.y + j)
+                    SCREEN.blit(shape, (x,y))
+                    pygame.draw.rect(SCREEN, WHITE, (x, y, CELL, CELL), 1)
 
         pygame.display.update()
         clock.tick(FPS)
