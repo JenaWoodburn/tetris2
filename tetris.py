@@ -97,10 +97,31 @@ class Tetris:
         self.figure = self.next
         self.next = Shape(5, 0)
 
+    # Collision detection
+    def collision(self) -> bool:
+        for i in range(4):
+            for j in range(4):
+                if (i*4 + j) in self.figure.image():
+                    block_row = i + self.figure.y
+                    block_col = j + self.figure.x
+                    if (block_row >= self.rows or block_col >= self.cols or block_row < 0 or self.grid[block_row][block_col] > 0):
+                        return True
+        return False
+
+    # Remove row
+
+    # Move down
+    def move_down(self):
+        self.figure.y += 1
+        if self.collision():
+            self.figure.y -= 1
+
 
 # Main game loop
 def main():
     tetris = Tetris(ROWS, COLS)
+    counter = 0
+    move = True
     run = True
     while run:
         SCREEN.fill(BG_COLOUR)
@@ -109,6 +130,17 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
                 sys.exit()
+
+        # let block fall at constant rate
+        counter += 1
+        if counter >= 10000:
+            counter = 0
+
+        if move:
+            if counter % (FPS // (tetris.level*2)) == 0:
+                if not tetris.end:
+                    tetris.move_down()
+                
 
         tetris.make_grid()
 
