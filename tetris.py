@@ -104,7 +104,7 @@ class Tetris:
                 if (i*4 + j) in self.figure.image():
                     block_row = i + self.figure.y
                     block_col = j + self.figure.x
-                    if (block_row >= self.rows or block_col >= self.cols or block_col <= 0 or self.grid[block_row][block_col] > 0):
+                    if (block_row >= self.rows or block_col >= self.cols or block_col < 0 or self.grid[block_row][block_col] > 0):
                         return True
         return False
 
@@ -165,14 +165,15 @@ def main():
         tetris.make_grid()
 
         # show shape on game screen
-        for i in range(4):
-            for j in range(4):
-                if (i * 4 + j) in tetris.figure.image():
-                    shape = ASSETS[tetris.figure.colour]
-                    x = CELL * (tetris.figure.x + i)
-                    y = CELL * (tetris.figure.y + j)
-                    SCREEN.blit(shape, (x,y))
-                    pygame.draw.rect(SCREEN, WHITE, (x, y, CELL, CELL), 1)
+        if tetris.figure:
+            for i in range(4):
+                for j in range(4):
+                    if (i*4 + j) in tetris.figure.image():
+                        shape = ASSETS[tetris.figure.colour]
+                        x = CELL * (tetris.figure.x + j)
+                        y = CELL * (tetris.figure.y + i)
+                        SCREEN.blit(shape, (x,y))
+                        pygame.draw.rect(SCREEN, WHITE, (x, y, CELL, CELL), 1)
 
         pygame.display.update()
         clock.tick(FPS)
