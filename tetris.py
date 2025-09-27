@@ -128,6 +128,13 @@ class Tetris:
         if self.collision():
             self.figure.x -=  1
 
+    # Freefall - when shape is in correct position, freefall lets it drop to bottom of game at once rather than wait for it to fall one row at a time
+    def freefall(self):
+        while not self.collision():
+            self.figure.y += 1
+        self.figure.y -= 1
+
+
 
 # Main game loop
 def main():
@@ -149,6 +156,8 @@ def main():
                 tetris.left()
             elif keys[pygame.K_RIGHT]:
                 tetris.right()
+            elif keys[pygame.K_SPACE]:
+                tetris.freefall()
 
 
         # let block fall at constant rate
